@@ -32,7 +32,7 @@ export default function Home() {
                 className="px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow"
                 data-testid="button-reserve-seat-hero"
               >
-                Register Now - $25
+                Reserve Your Seat
               </Button>
             </Link>
             <p className="text-sm opacity-90">

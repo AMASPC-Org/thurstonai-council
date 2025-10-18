@@ -1,5 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { Lightbulb, Shield, Handshake } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'wouter';
+import { Lightbulb, Shield, Handshake, CheckCircle } from 'lucide-react';
 
 export default function About() {
   return (
@@ -123,6 +125,69 @@ export default function About() {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
+
+      {/* How to Join the Council */}
+      <section className="py-16 md:py-24 bg-accent">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-semibold mb-6">
+            How to Join the Thurston AI Business Council
+          </h2>
+          <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Join a growing community of forward-thinking leaders committed to navigating the AI 
+            transformation together. Membership is open to all Thurston County businesses, 
+            non-profits, educational institutions, and civic leaders.
+          </p>
+          
+          <div className="max-w-3xl mx-auto mb-8">
+            <Card>
+              <CardContent className="p-8">
+                <h3 className="text-xl font-semibold mb-4">Member Benefits</h3>
+                <ul className="text-left space-y-3 text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Exclusive access to AI workshops and training sessions</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Priority invitations to Council events and summits</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Access to our member-only resource library and tools</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Networking opportunities with regional AI leaders</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Voting rights on Council initiatives and priorities</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Opportunities to shape regional AI policy and best practices</span>
+                  </li>
+                </ul>
+                
+                <div className="mt-6 p-4 bg-primary/5 rounded-lg border border-primary/20">
+                  <p className="text-sm font-medium">Membership Fees</p>
+                  <p className="text-lg font-semibold text-primary mt-1">Free for Charter Members</p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Join now as a founding member with no annual fee through 2026. 
+                    Standard membership ($250/year) begins in 2027.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <Link href="/membership-application">
+            <Button size="lg" className="px-8" data-testid="button-join-council">
+              Apply for Membership
+            </Button>
+          </Link>
         </div>
       </section>
     </div>

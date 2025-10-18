@@ -12,6 +12,7 @@ import GetInvolved from "@/pages/GetInvolved";
 import Sponsorship from "@/pages/Sponsorship";
 import SpeakerApplication from "@/pages/SpeakerApplication";
 import PartnershipOpportunities from "@/pages/PartnershipOpportunities";
+import MembershipApplication from "@/pages/MembershipApplication";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -27,6 +28,7 @@ function Router() {
           <Route path="/sponsorship" component={Sponsorship} />
           <Route path="/speaker-application" component={SpeakerApplication} />
           <Route path="/partnership" component={PartnershipOpportunities} />
+          <Route path="/membership-application" component={MembershipApplication} />
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>

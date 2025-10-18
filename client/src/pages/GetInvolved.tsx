@@ -101,9 +101,11 @@ export default function GetInvolved() {
                   Get exclusive access to resources, events, and networking opportunities 
                   as a Council member.
                 </p>
-                <Button variant="outline" className="w-full" disabled>
-                  Membership Opening 2026
-                </Button>
+                <Link href="/membership-application">
+                  <Button variant="outline" className="w-full">
+                    Apply for Membership
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
