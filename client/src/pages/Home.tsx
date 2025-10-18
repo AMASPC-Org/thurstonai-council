@@ -1,88 +1,221 @@
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Brain, Users, Target } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Brain, Users, Target, TrendingUp, Handshake, Compass, FileText, GraduationCap, BookOpen, ArrowRight } from 'lucide-react';
+import HeroBackground from '@/components/HeroBackground';
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-primary text-primary-foreground">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 text-center">
+      {/* Hero Section with Background */}
+      <section className="relative bg-primary text-primary-foreground overflow-hidden">
+        <HeroBackground />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 text-center">
+          <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm font-semibold">
+            LIMITED SEATS • JANUARY 2026
+          </Badge>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             Navigating the AI Future of Thurston County. Together.
           </h1>
           <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto opacity-95">
             The Thurston AI Business Council is a community-led initiative helping local businesses, 
-            non-profits, and leaders understand, adapt, and thrive. We are hosting our inaugural 
-            in-person summit in January 2026.
+            non-profits, and leaders understand, adapt, and thrive. Join us for our inaugural 
+            summit—your first step toward AI readiness.
           </p>
-          <div className="mt-10">
+          <div className="mt-10 space-y-4">
             <Link href="/summit">
               <Button 
                 size="lg" 
                 variant="secondary"
-                className="px-8 py-6 text-lg font-semibold"
+                className="px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow"
                 data-testid="button-reserve-seat-hero"
               >
-                Reserve Your Seat
+                Reserve Your Free Seat Now
               </Button>
             </Link>
+            <p className="text-sm opacity-90">
+              90-minute summit • Practical insights • Local networking
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Mission Statement */}
+      {/* Why Join the Council Section */}
       <section className="py-16 md:py-24 bg-background">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-6">
-            Building a Stronger, Smarter Community
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-semibold text-center mb-4">
+            Why Join the Council?
           </h2>
-          <p className="text-lg leading-relaxed text-muted-foreground">
-            As artificial intelligence reshapes the global economy, we believe no local business 
-            should be left behind. The Thurston AI Business Council brings together leaders, 
-            innovators, and community members to share knowledge, build connections, and ensure 
-            our region thrives in the AI era.
+          <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
+            Become part of Thurston County's premier AI business community and unlock immediate 
+            benefits that will transform your organization's future.
           </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="border-border hover:shadow-lg transition-shadow">
+              <CardContent className="p-6 md:p-8">
+                <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg mb-4">
+                  <TrendingUp className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Gain a Competitive Edge</h3>
+                <p className="text-muted-foreground mb-4">
+                  Access cutting-edge AI insights and strategies before your competition. Learn which 
+                  tools deliver real ROI and which are just hype.
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Exclusive AI tool evaluations
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Implementation roadmaps
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Cost-benefit analyses
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-border hover:shadow-lg transition-shadow">
+              <CardContent className="p-6 md:p-8">
+                <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg mb-4">
+                  <Handshake className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Connect & Collaborate</h3>
+                <p className="text-muted-foreground mb-4">
+                  Network with local leaders and innovators who are successfully implementing AI. 
+                  Build partnerships that drive mutual growth.
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Monthly networking events
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Peer learning groups
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Partnership opportunities
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-border hover:shadow-lg transition-shadow">
+              <CardContent className="p-6 md:p-8">
+                <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg mb-4">
+                  <Compass className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Shape the Future</h3>
+                <p className="text-muted-foreground mb-4">
+                  Influence the direction of AI adoption in Thurston County. Your voice matters in 
+                  building an inclusive, thriving AI ecosystem.
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Advisory board opportunities
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Policy input sessions
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Community leadership roles
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
+      {/* Insights & Resources Section */}
       <section className="py-16 md:py-24 bg-accent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12">
-            Why Join the Council
+          <h2 className="text-3xl md:text-4xl font-semibold text-center mb-4">
+            Stay Ahead with Data-Driven Insights
           </h2>
+          <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
+            Your AI Knowledge Hub—curated resources from leading experts and local innovators 
+            to keep you informed and inspired.
+          </p>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="border-border">
-              <CardContent className="p-6 md:p-8">
-                <Brain className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Learn & Adapt</h3>
-                <p className="text-muted-foreground">
-                  Get practical insights on AI tools and strategies tailored for local businesses
+            <Card className="border-border hover:shadow-lg transition-shadow cursor-pointer group">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <GraduationCap className="w-8 h-8 text-primary" />
+                  <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Academic Papers</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Data-driven research from leading institutions and AI researchers
                 </p>
+                <div className="space-y-2">
+                  <div className="text-sm">
+                    <Badge variant="outline" className="mb-1">Coming Soon</Badge>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Research from Wharton, MIT, and Stanford
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
             
-            <Card className="border-border">
-              <CardContent className="p-6 md:p-8">
-                <Users className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Connect & Collaborate</h3>
-                <p className="text-muted-foreground">
-                  Network with forward-thinking leaders and innovators in Thurston County
+            <Card className="border-border hover:shadow-lg transition-shadow cursor-pointer group">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <FileText className="w-8 h-8 text-primary" />
+                  <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Expert Articles</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Thought leadership from AI pioneers and industry experts
                 </p>
+                <div className="space-y-2">
+                  <div className="text-sm">
+                    <Badge variant="outline" className="mb-1">Featured</Badge>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Insights from Ethan Mollick and other thought leaders
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
             
-            <Card className="border-border">
-              <CardContent className="p-6 md:p-8">
-                <Target className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Thrive & Grow</h3>
-                <p className="text-muted-foreground">
-                  Stay ahead of the curve and position your organization for success
+            <Card className="border-border hover:shadow-lg transition-shadow cursor-pointer group">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <BookOpen className="w-8 h-8 text-primary" />
+                  <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Local Case Studies</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Real-world AI applications from Thurston County businesses
                 </p>
+                <div className="space-y-2">
+                  <div className="text-sm">
+                    <Badge variant="outline" className="mb-1">Launching Q1 2026</Badge>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Success stories from your neighbors
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
+          </div>
+          
+          <div className="mt-12 text-center">
+            <p className="text-sm text-muted-foreground">
+              Full resource library launching after the inaugural summit • Subscribe for updates
+            </p>
           </div>
         </div>
       </section>
