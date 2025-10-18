@@ -1,0 +1,94 @@
+Hello Replit Agent. Please create a 4-page website for ThurstonAI.com to promote the "Thurston AI Business Council."
+
+Project Goal: To create a professional, credible website to establish the council and drive registrations for its inaugural in-person summit. Design: Use a modern, professional color palette (tech-blue, white, and dark gray). It must be fully mobile-responsive.
+
+Page 1: index.html (Home Page)
+Navigation Bar (on all pages): [Home] [About the Council] [The Inaugural Summit] [Get Involved]
+
+Hero Section:
+
+Headline: Navigating the AI Future of Thurston County. Together.
+
+Sub-headline: The Thurston AI Business Council is a community-led initiative helping local businesses, non-profits, and leaders understand, adapt, and thrive. We are hosting our inaugural in-person summit in January 2026.
+
+Primary Call to Action (Button): "Reserve Your Seat" (Links to summit.html)
+
+Page 2: about.html (About the Council)
+Headline: Our Mission: Demystifying AI for Our Community
+
+"Why We Started" Section:
+
+Generate 2-3 paragraphs. Key themes: "AI is the biggest technological shift of our lifetime. Local businesses and non-profits are at risk of being left behind. The Thurston AI Business Council was formed to be a clear, local, and trusted resource—a place to ask questions, share strategies, and learn together."
+
+"Founding Partner" Section:
+
+"The Thurston AI Business Council is an initiative powered by the American Marketing Alliance SPC." (Include the AMA logo here if you have one).
+
+Page 3: summit.html (The Inaugural Summit)
+Headline: The Inaugural Thurston AI Business Summit
+
+Sub-headline: A 90-minute, in-person summit focused on practical, real-world AI strategies for local business.
+
+Event Details:
+
+Date: Tuesday, January 20, 2026
+
+Time: 9:00 AM - 10:30 AM (Doors open at 8:30 AM for networking)
+
+Status: FREE (Registration is required, seating is limited)
+
+Venue Partner Section:
+
+Headline: Hosted in Partnership with the Thurston Economic Development Council (EDC)
+
+Text: "We are proud to partner with the Thurston EDC to host this inaugural event at their state-of-the-art facility."
+
+Location: [Add the EDC's Address and a simple Google Maps embed]
+
+Agenda (Simple):
+
+8:30 AM: Networking & Coffee
+
+9:00 AM: Welcome & The State of Local AI
+
+9:20 AM: Keynote (Speaker TBD - e.g., "AI Expert from Seattle")
+
+9:50 AM: Local Leader Panel
+
+10:20 AM: Q&A and Closing
+
+Registration Form (The Call to Action):
+
+Headline: Reserve Your Free Seat
+
+Text: "Seating is limited. Register now to secure your spot."
+
+Fields: [First Name] [Last Name] [Email Address] [Business/Organization]
+
+Button: "Reserve My Seat"
+
+Page 4: get-involved.html (Get Involved)
+Headline: Help Build Our Community
+
+For Sponsors:
+
+Sub-headline: Become an Inaugural Summit Sponsor
+
+Text: "We are seeking sponsors to provide coffee, breakfast, and A/V support for our inaugural summit. Showcase your brand as a foundational leader..."
+
+Call to Action: Create a "Learn More About Sponsorship" button that opens a mailto: link.
+
+For Speakers:
+
+Sub-headline: Speak at a Future Event
+
+Text: "Are you a local expert using AI in your business? We want to hear from you for our future event panel."
+
+Call to Action: Create a "Become a Speaker" button that opens a mailto: link.
+
+Footer (on all pages):
+"The Thurston AI Business Council is an initiative powered by the American Marketing Alliance SPC."
+
+"© 2025 | Thurston AI Business Council"
+
+Please generate the complete HTML and CSS files for this 4-page website.
