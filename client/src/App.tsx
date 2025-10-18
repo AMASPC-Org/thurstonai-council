@@ -9,6 +9,8 @@ import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Summit from "@/pages/Summit";
 import GetInvolved from "@/pages/GetInvolved";
+import Sponsorship from "@/pages/Sponsorship";
+import SpeakerApplication from "@/pages/SpeakerApplication";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,6 +23,8 @@ function Router() {
           <Route path="/about" component={About} />
           <Route path="/summit" component={Summit} />
           <Route path="/get-involved" component={GetInvolved} />
+          <Route path="/sponsorship" component={Sponsorship} />
+          <Route path="/speaker-application" component={SpeakerApplication} />
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>

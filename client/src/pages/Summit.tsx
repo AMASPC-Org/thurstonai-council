@@ -1,5 +1,7 @@
+import { Link } from 'wouter';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import EventAgenda from '@/components/EventAgenda';
 import RegistrationForm from '@/components/RegistrationForm';
@@ -171,6 +173,66 @@ export default function Summit() {
       <section className="py-16 md:py-24 bg-muted">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <RegistrationForm />
+        </div>
+      </section>
+
+      {/* Get Involved Section */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12">
+            Be Part of the Inaugural Summit
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Sponsors Column */}
+            <Card className="h-full">
+              <CardContent className="p-8 md:p-10">
+                <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg mb-6">
+                  <Users className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+                  Become an Inaugural Summit Sponsor
+                </h3>
+                <p className="text-lg text-muted-foreground mb-6">
+                  Join us as a founding sponsor and showcase your commitment to advancing AI literacy 
+                  in Thurston County. Limited sponsorship opportunities available.
+                </p>
+                <Link href="/sponsorship">
+                  <Button 
+                    size="lg"
+                    className="w-full"
+                    data-testid="button-sponsorship-info"
+                  >
+                    Learn More About Sponsorship
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Speakers Column */}
+            <Card className="h-full">
+              <CardContent className="p-8 md:p-10">
+                <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg mb-6">
+                  <Users className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+                  Speak at a Future Event
+                </h3>
+                <p className="text-lg text-muted-foreground mb-6">
+                  Share your AI implementation experience with the community. We're seeking local 
+                  leaders and experts for upcoming panels and presentations.
+                </p>
+                <Link href="/speaker-application">
+                  <Button 
+                    size="lg"
+                    className="w-full"
+                    data-testid="button-speaker-application"
+                  >
+                    Apply to Become a Speaker
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
     </div>
