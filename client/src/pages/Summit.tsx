@@ -68,7 +68,11 @@ export default function Summit() {
               The Inaugural Thurston AI Business Summit
             </h1>
             <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
-              A 90-minute, in-person summit focused on practical, real-world AI strategies for local business.
+              Join the Thurston AI Business Council for its Inaugural Summit 2026, a focused 90-minute event 
+              designed for local business, government, education, and healthcare leaders. This impactful summit 
+              will feature a leading keynote speaker and an expert cross-sector panel providing immediate, 
+              actionable insights into AI's opportunities and challenges within Thurston County. Don't miss 
+              this essential event for just $25. Scholarships are available to ensure broad community access.
             </p>
           </div>
         </div>
@@ -103,9 +107,10 @@ export default function Summit() {
               <CardContent className="p-6 flex items-start space-x-4">
                 <Users className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-semibold">Status</h3>
-                  <Badge variant="secondary" className="mt-1">FREE EVENT</Badge>
-                  <p className="text-sm text-muted-foreground mt-1">Limited seating</p>
+                  <h3 className="font-semibold">Registration</h3>
+                  <Badge variant="secondary" className="mt-1">$25 ADMISSION</Badge>
+                  <p className="text-sm text-muted-foreground mt-1">Scholarships available</p>
+                  <p className="text-sm text-muted-foreground">Limited seating</p>
                 </div>
               </CardContent>
             </Card>

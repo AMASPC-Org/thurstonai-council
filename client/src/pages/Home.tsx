@@ -19,9 +19,10 @@ export default function Home() {
             Navigating the AI Future of Thurston County. Together.
           </h1>
           <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto opacity-95">
-            The Thurston AI Business Council is a community-led initiative helping local businesses, 
-            non-profits, and leaders understand, adapt, and thrive. Join us for our inaugural 
-            summit—your first step toward AI readiness.
+            The Thurston AI Business Council, a community-led initiative, invites local leaders to our 
+            Inaugural Summit 2026. Join us for a concise, high-impact 90-minute event featuring a dynamic 
+            keynote and an expert cross-sector panel, designed to equip you with immediate, actionable AI 
+            insights for your business. Secure your place now for just $25. Scholarships are available upon request.
           </p>
           <div className="mt-10 space-y-4">
             <Link href="/summit">
@@ -227,7 +228,8 @@ export default function Home() {
             Join Us for the Inaugural Summit
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Tuesday, January 20, 2026 • 9:00 AM - 10:30 AM • Free Registration
+            Tuesday, January 20, 2026 • 9:00 AM - 10:30 AM • This 90-minute, high-impact event is a critical 
+            step for businesses looking to thrive in the AI era. Secure your attendance for just $25. Scholarships available.
           </p>
           <Link href="/summit">
             <Button 

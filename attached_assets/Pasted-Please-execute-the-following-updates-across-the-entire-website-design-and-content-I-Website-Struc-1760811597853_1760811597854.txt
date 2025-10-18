@@ -1,0 +1,83 @@
+Please execute the following updates across the entire website design and content:
+
+I. Website Structure & Navigation:
+
+Refine 'The Inaugural Summit' Page Content:
+
+Relocate the 'Become an Inaugural Summit Sponsor' and 'Speak at a Future Event' sections (currently found on the 'Get Involved' page) to be prominent sections directly on 'The Inaugural Summit' page.
+
+Ensure these sections have clear calls-to-action with buttons: 'Learn More About Sponsorship' and 'Become a Speaker'.
+
+Create New 'Partnership Opportunities' Page:
+
+Build out a new page for the 'Partnership Opportunities' button (currently on the 'Get Involved' page).
+
+This new page should go beyond event sponsorship. It should outline various ways organizations can collaborate with the Thurston AI Business Council, including:
+
+An overview of partner benefits.
+
+A summary or link back to event sponsorship.
+
+Opportunities for content/research collaboration.
+
+Program or initiative partnerships.
+
+A clear call-to-action or contact form for partnership inquiries.
+
+II. Frontend Button Functionality (Linking):
+
+For ALL existing call-to-action buttons across the site (e.g., 'Reserve Your Seat', 'Learn More About Sponsorship', 'Become a Speaker', the new 'Partnership Opportunities' button, etc.), ensure they are no longer static placeholders.
+
+Each button should correctly link to its respective detail page or form. Create basic, placeholder content for any newly linked pages (e.g., a simple 'Sponsorship Details' page, 'Speaker Application Form' page, and the 'Partnership Opportunities' page) to demonstrate the functionality.
+
+III. Ad Copy & Content Updates (As Previously Discussed):
+
+Homepage Banner Section (Main Call-to-Action):
+
+Primary Headline (remains the same): 'Navigating the AI Future of Thurston County. Together.'
+
+Sub-headline/Body Text:
+
+Replace existing paragraph: 'The Thurston AI Business Council, a community-led initiative, invites local leaders to our Inaugural Summit 2026. Join us for a concise, high-impact 90-minute event featuring a dynamic keynote and an expert cross-sector panel, designed to equip you with immediate, actionable AI insights for your business. Secure your place now for just $25. Scholarships are available upon request.'
+
+Call-to-Action Button: 'Reserve Your Seat' (remains the same)
+
+Homepage 'Join Us for the Inaugural Summit' Section:
+
+Headline (remains the same): 'Join Us for the Inaugural Summit'
+
+Body Text (below date/time):
+
+Update: 'This 90-minute, high-impact event is a critical step for businesses looking to thrive in the AI era. Secure your attendance for just $25. Scholarships available.'
+
+Call-to-Action Button: 'Learn More & Register' (remains the same)
+
+'The Inaugural Summit' Page (Main Event Details/Overview):
+
+Event Description/Overview Paragraph (near the top):
+
+Revise: 'Join the Thurston AI Business Council for its Inaugural Summit 2026, a focused 90-minute event designed for local business, government, education, and healthcare leaders. This impactful summit will feature a leading keynote speaker and an expert cross-sector panel providing immediate, actionable insights into AI's opportunities and challenges within Thurston County. Don't miss this essential event for just $25. Scholarships are available to ensure broad community access.'
+
+'The Inaugural Summit' Page (Event Agenda Section):
+
+Update the Expert Panel Entry:
+
+Title: 'Expert Panel: AI in Thurston County: Cross-Sector Perspectives'
+
+Description: 'Hear from leaders across government, education, healthcare, and business as they discuss real-world AI implementation, challenges, and opportunities specific to Thurston County. Featuring representatives from Government, Education, Healthcare, and Business sectors, moderated by [Your Name/Placeholder].'
+
+Ensure 'Breakout Sessions' are removed from the agenda, and timings are adjusted for a 90-minute flow.
+
+IV. General Website Aesthetics:
+
+Maintain the existing professional, clean, and modern aesthetic with the deep tech blue, dark gray, and white color palette.
+
+Ensure the Thurston AI Business Council logo (the icon combining the Capitol Dome, Mount Rainier, and AI) is prominently featured in the header of all pages.
+
+V. Backend Functionality Notes (for future build phase - not a design prompt):
+
+Specify the requirement for an integrated ticketing system capable of handling both $25 paid registrations and a scholarship/free registration option.
+
+Ensure mechanisms for payment processing, automated confirmations, and attendee management are included in the build specifications."
+
+This single prompt covers all your requested design, content, and linking updates, and also clarifies the path for the Partnership Opportunities page.

@@ -24,8 +24,8 @@ const agendaItems: AgendaItem[] = [
   },
   {
     time: '9:50 AM',
-    title: 'Local Leader Panel',
-    description: 'Insights from businesses successfully implementing AI'
+    title: 'Expert Panel: AI in Thurston County: Cross-Sector Perspectives',
+    description: 'Hear from leaders across government, education, healthcare, and business as they discuss real-world AI implementation, challenges, and opportunities specific to Thurston County. Featuring representatives from Government, Education, Healthcare, and Business sectors.'
   },
   {
     time: '10:20 AM',

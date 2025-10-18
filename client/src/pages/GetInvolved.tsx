@@ -189,13 +189,14 @@ export default function GetInvolved() {
             adoption in Thurston County. Whether you're an educational institution, technology 
             company, or community organization, let's work together.
           </p>
-          <Button 
-            size="lg"
-            onClick={() => window.location.href = 'mailto:partnerships@thurstonai.com'}
-            data-testid="button-partnerships"
-          >
-            Explore Partnership Options
-          </Button>
+          <Link href="/partnership">
+            <Button 
+              size="lg"
+              data-testid="button-partnerships"
+            >
+              Explore Partnership Options
+            </Button>
+          </Link>
         </div>
       </section>
     </div>
