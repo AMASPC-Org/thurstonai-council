@@ -4,9 +4,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 export default function RegistrationForm() {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -14,15 +16,44 @@ export default function RegistrationForm() {
     organization: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: remove mock functionality - implement actual registration
-    console.log('Registration submitted:', formData);
-    toast({
-      title: "Registration Successful!",
-      description: "You've reserved your seat for the inaugural summit. Check your email for confirmation.",
-    });
-    setFormData({ firstName: '', lastName: '', email: '', organization: '' });
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Registration Successful!",
+          description: data.message || "You've reserved your seat for the inaugural summit.",
+        });
+        setFormData({ firstName: '', lastName: '', email: '', organization: '' });
+      } else {
+        toast({
+          title: "Registration Failed",
+          description: data.error || "Please try again later.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      toast({
+        title: "Network Error",
+        description: "Unable to submit registration. Please check your connection and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,9 +127,17 @@ export default function RegistrationForm() {
             type="submit" 
             size="lg" 
             className="w-full"
+            disabled={isSubmitting}
             data-testid="button-register"
           >
-            Reserve My Seat
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              'Reserve My Seat'
+            )}
           </Button>
         </form>
       </CardContent>
