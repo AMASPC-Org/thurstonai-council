@@ -1,10 +1,11 @@
+import { Link } from 'wouter';
 import Logo from './Logo';
 
 export default function Footer() {
   return (
     <footer className="bg-foreground text-primary-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Mission */}
           <div className="space-y-4">
             <Logo className="h-12" variant="white" />
@@ -18,24 +19,60 @@ export default function Footer() {
             <h3 className="text-base font-semibold">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="/" className="opacity-90 hover:opacity-100 transition-opacity">
-                  Home
-                </a>
+                <Link href="/">
+                  <a className="opacity-90 hover:opacity-100 transition-opacity">
+                    Home
+                  </a>
+                </Link>
               </li>
               <li>
-                <a href="/about" className="opacity-90 hover:opacity-100 transition-opacity">
-                  About the Council
-                </a>
+                <Link href="/about">
+                  <a className="opacity-90 hover:opacity-100 transition-opacity">
+                    About the Council
+                  </a>
+                </Link>
               </li>
               <li>
-                <a href="/summit" className="opacity-90 hover:opacity-100 transition-opacity">
-                  The Inaugural Summit
-                </a>
+                <Link href="/summit">
+                  <a className="opacity-90 hover:opacity-100 transition-opacity">
+                    The Inaugural Summit
+                  </a>
+                </Link>
               </li>
               <li>
-                <a href="/get-involved" className="opacity-90 hover:opacity-100 transition-opacity">
-                  Get Involved
-                </a>
+                <Link href="/get-involved">
+                  <a className="opacity-90 hover:opacity-100 transition-opacity">
+                    Get Involved
+                  </a>
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal Links */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold">Legal</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/privacy">
+                  <a className="opacity-90 hover:opacity-100 transition-opacity">
+                    Privacy Policy
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms">
+                  <a className="opacity-90 hover:opacity-100 transition-opacity">
+                    Terms of Use
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/refund">
+                  <a className="opacity-90 hover:opacity-100 transition-opacity">
+                    Refund Policy
+                  </a>
+                </Link>
               </li>
             </ul>
           </div>

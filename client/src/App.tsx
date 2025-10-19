@@ -14,6 +14,10 @@ import SpeakerApplication from "@/pages/SpeakerApplication";
 import PartnershipOpportunities from "@/pages/PartnershipOpportunities";
 import MembershipApplication from "@/pages/MembershipApplication";
 import NotFound from "@/pages/not-found";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
+import Refund from "@/pages/Refund";
+import CookieNotice from "@/components/CookieNotice";
 
 function Router() {
   return (
@@ -29,6 +33,9 @@ function Router() {
           <Route path="/speaker-application" component={SpeakerApplication} />
           <Route path="/partnership" component={PartnershipOpportunities} />
           <Route path="/membership-application" component={MembershipApplication} />
+          <Route path="/privacy" component={Privacy} />
+          <Route path="/terms" component={Terms} />
+          <Route path="/refund" component={Refund} />
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>
@@ -44,6 +51,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
+        <CookieNotice />
       </TooltipProvider>
     </QueryClientProvider>
   );
