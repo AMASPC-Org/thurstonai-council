@@ -94,46 +94,37 @@ export default function CouncilAssistant() {
       { phrase: "Sponsorship page", route: "/sponsorship" },
     ];
 
-    const newParts: (string | JSX.Element)[] = [];
-    
-    parts.forEach((part) => {
-      if (typeof part === "string") {
-        let currentPart = part;
-        
-        pageLinks.forEach(({ phrase, route }) => {
+    // Process each page link
+    pageLinks.forEach(({ phrase, route }) => {
+      const newParts: (string | JSX.Element)[] = [];
+      
+      parts.forEach((part) => {
+        if (typeof part === "string") {
           const regex = new RegExp(`(${phrase})`, "gi");
-          const splits = currentPart.split(regex);
+          const splits = part.split(regex);
           
-          if (splits.length > 1) {
-            const subParts: (string | JSX.Element)[] = [];
-            splits.forEach((split, index) => {
-              if (split.toLowerCase() === phrase.toLowerCase()) {
-                subParts.push(
-                  <Link key={`${route}-${index}`} href={route}>
-                    <a className="underline hover:opacity-80 cursor-pointer font-medium">
-                      {split}
-                    </a>
-                  </Link>
-                );
-              } else if (split) {
-                subParts.push(split);
-              }
-            });
-            currentPart = subParts as any;
-          }
-        });
-        
-        if (Array.isArray(currentPart)) {
-          newParts.push(...currentPart);
+          splits.forEach((split, index) => {
+            if (split.toLowerCase() === phrase.toLowerCase()) {
+              newParts.push(
+                <Link key={`${route}-${index}`} href={route}>
+                  <a className="underline hover:opacity-80 cursor-pointer font-medium">
+                    {split}
+                  </a>
+                </Link>
+              );
+            } else if (split) {
+              newParts.push(split);
+            }
+          });
         } else {
-          newParts.push(currentPart);
+          newParts.push(part);
         }
-      } else {
-        newParts.push(part);
-      }
+      });
+      
+      parts = newParts;
     });
 
-    return newParts.length > 0 ? newParts : parts;
+    return parts;
   };
 
   // Auto-scroll to bottom when new messages arrive
