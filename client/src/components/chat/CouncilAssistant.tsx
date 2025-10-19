@@ -22,7 +22,51 @@ export default function CouncilAssistant() {
 
   // Parse message content and replace page mentions with clickable links
   const parseMessageContent = (content: string) => {
-    // First, check for calendar links
+    // Check for registration requests and handle them
+    const registrationRegex = /\[REGISTRATION_REQUEST:\s*firstName="([^"]+)"\s*lastName="([^"]+)"\s*email="([^"]+)"\s*organization="([^"]+)"\s*title="([^"]+)"\s*sector="([^"]+)"\]/;
+    const registrationMatch = content.match(registrationRegex);
+    
+    if (registrationMatch) {
+      // Extract registration data
+      const [fullMatch, firstName, lastName, email, organization, title, sector] = registrationMatch;
+      
+      // Remove registration request from content
+      const cleanContent = content.replace(fullMatch, '').trim();
+      
+      // Make API call to create registration
+      fetch('/api/chat/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          organization,
+          title,
+          sector
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.url) {
+          // Auto-redirect to Stripe checkout
+          window.location.href = data.url;
+        } else if (data.error) {
+          // Show error (we can't add to messages here, but the AI will handle it)
+          console.error('Registration error:', data.error);
+        }
+      })
+      .catch(err => {
+        console.error('Registration error:', err);
+      });
+      
+      // Return the message without the registration command
+      return [cleanContent + ' Redirecting you to complete payment...'];
+    }
+    
+    // Check for calendar links
     const calendarLinkRegex = /\[CALENDAR_LINK: ([^\]]+)\]/g;
     let parts: (string | JSX.Element)[] = [];
     let lastIndex = 0;
