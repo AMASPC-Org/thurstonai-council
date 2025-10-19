@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "wouter";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,51 @@ export default function CouncilAssistant() {
   } = useCouncilAssistant();
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  // Parse message content and replace page mentions with clickable links
+  const parseMessageContent = (content: string) => {
+    // Map of phrases to their routes
+    const pageLinks = [
+      { phrase: "Summit page", route: "/summit" },
+      { phrase: "About page", route: "/about" },
+      { phrase: "Get Involved page", route: "/get-involved" },
+      { phrase: "Sponsorship page", route: "/sponsorship" },
+    ];
+
+    let parts: (string | JSX.Element)[] = [content];
+
+    // Process each page link
+    pageLinks.forEach(({ phrase, route }) => {
+      const newParts: (string | JSX.Element)[] = [];
+      
+      parts.forEach((part) => {
+        if (typeof part === "string") {
+          const regex = new RegExp(`(${phrase})`, "gi");
+          const splits = part.split(regex);
+          
+          splits.forEach((split, index) => {
+            if (split.toLowerCase() === phrase.toLowerCase()) {
+              newParts.push(
+                <Link key={`${route}-${index}`} href={route}>
+                  <a className="underline hover:opacity-80 cursor-pointer font-medium">
+                    {split}
+                  </a>
+                </Link>
+              );
+            } else if (split) {
+              newParts.push(split);
+            }
+          });
+        } else {
+          newParts.push(part);
+        }
+      });
+      
+      parts = newParts;
+    });
+
+    return parts;
+  };
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -102,14 +148,20 @@ export default function CouncilAssistant() {
                         : "bg-muted"
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap break-words">
-                      {message.content || (
+                    <div className="text-sm whitespace-pre-wrap break-words">
+                      {message.content ? (
+                        message.role === "assistant" ? (
+                          parseMessageContent(message.content)
+                        ) : (
+                          message.content
+                        )
+                      ) : (
                         <span className="flex items-center gap-2">
                           <Loader2 className="h-3 w-3 animate-spin" />
                           <span className="italic">Thinking...</span>
                         </span>
                       )}
-                    </p>
+                    </div>
                     <p className="text-xs opacity-70 mt-1">
                       {message.timestamp.toLocaleTimeString()}
                     </p>
