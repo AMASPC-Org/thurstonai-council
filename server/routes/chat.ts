@@ -3,11 +3,19 @@ import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
+import Stripe from "stripe";
+import { storage } from "../storage";
+import { randomUUID } from "crypto";
 
 const chatRouter = Router();
 
 // Initialize Gemini AI with API key
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+
+// Initialize Stripe
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+  apiVersion: "2025-09-30.clover",
+});
 
 // Get directory paths for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -79,6 +87,78 @@ When assisting users:
 
 Remember: The knowledge base content above is your authoritative source. Always cite specific details from it when answering questions.`;
 
+// Function to initiate summit registration and create Stripe checkout session
+async function initiateSummitRegistration(
+  firstName: string, 
+  lastName: string, 
+  email: string, 
+  organization: string,
+  title: string,
+  sector: string
+): Promise<{ url: string; registrationId: string }> {
+  try {
+    // Check if email already registered
+    const existingRegistration = await storage.getRegistrationByEmail(email);
+    if (existingRegistration) {
+      throw new Error("This email is already registered for the summit.");
+    }
+    
+    // Create a new registration with pending payment status
+    const registrationData = {
+      firstName,
+      lastName,
+      email,
+      organization,
+      title,
+      sector,
+      paymentStatus: "pending" as const,
+    };
+    
+    const registration = await storage.createRegistration(registrationData);
+    
+    // Create Stripe checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [{
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "Thurston AI Business Summit 2026 Ticket",
+            description: "January 20, 2026 - 9:00 AM to 10:30 AM",
+          },
+          unit_amount: 2500, // $25.00 in cents
+        },
+        quantity: 1,
+      }],
+      mode: "payment",
+      success_url: `${process.env.NODE_ENV === 'production' ? 'https://' + process.env.REPL_SLUG + '.replit.app' : 'http://localhost:5000'}/summit?payment=success&registration=${registration.id}`,
+      cancel_url: `${process.env.NODE_ENV === 'production' ? 'https://' + process.env.REPL_SLUG + '.replit.app' : 'http://localhost:5000'}/summit?payment=cancelled`,
+      customer_email: email,
+      metadata: {
+        registrationId: registration.id,
+      },
+    });
+    
+    // Update registration with session ID
+    await storage.updateRegistrationPayment(registration.id, {
+      paymentStatus: "pending",
+      stripeSessionId: session.id,
+    });
+    
+    if (!session.url) {
+      throw new Error("Failed to create payment session URL");
+    }
+    
+    return { 
+      url: session.url,
+      registrationId: registration.id 
+    };
+  } catch (error) {
+    console.error("Registration error:", error);
+    throw error;
+  }
+}
+
 // Function to generate Google Calendar link
 function generateCalendarLink(title: string, date: string, startTime: string, endTime: string, location: string, details: string) {
   // Parse the date and times (expecting format like "2026-01-20", "09:00", "10:30")
@@ -101,6 +181,34 @@ function generateCalendarLink(title: string, date: string, startTime: string, en
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+// Create registration endpoint for chat
+chatRouter.post("/api/chat/register", async (req, res) => {
+  try {
+    const { firstName, lastName, email, organization, title, sector } = req.body;
+    
+    // Validate required fields
+    if (!firstName || !lastName || !email || !organization || !title || !sector) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+    
+    const result = await initiateSummitRegistration(
+      firstName,
+      lastName,
+      email,
+      organization,
+      title,
+      sector
+    );
+    
+    res.json(result);
+  } catch (error) {
+    console.error("Chat registration error:", error);
+    res.status(500).json({ 
+      error: error instanceof Error ? error.message : "Failed to create registration" 
+    });
+  }
+});
+
 // Chat endpoint for Council Assistant
 chatRouter.post("/api/chat", async (req, res) => {
   try {
@@ -115,9 +223,30 @@ chatRouter.post("/api/chat", async (req, res) => {
       model: "gemini-2.0-flash-exp",
       systemInstruction: SYSTEM_PROMPT + `
 
+REGISTRATION CAPABILITY: When a user expresses intent to register for the summit (e.g., "Yes, help me register", "I want to sign up", "Register me"), you should:
+
+1. First, collect ALL of the following information by asking the user:
+   - First name
+   - Last name
+   - Email address  
+   - Organization/Company name
+   - Job title
+   - Sector (must be one of: "Business - For Profit", "Non-profit", "Government", "Education", "Healthcare", "Other")
+
+2. Once you have ALL required information, create a special registration request in this EXACT format:
+   [REGISTRATION_REQUEST: firstName="John" lastName="Doe" email="john@example.com" organization="ACME Corp" title="Manager" sector="Business - For Profit"]
+
+3. The interface will process this request and redirect the user to Stripe checkout to complete their $25 payment.
+
+IMPORTANT: 
+- ALWAYS collect ALL fields before creating the registration request
+- The registration request MUST be on its own line
+- Use the exact format shown above with all fields
+- After creating the request, tell the user they'll be redirected to complete payment
+
 CALENDAR FEATURE: After a user confirms they have registered and paid for the summit, you should proactively ask: "Your registration is confirmed! Would you like to add the summit to your calendar?"
 
-If they say yes, provide them with this special calendar link that they can click to add the event:
+If they say yes, provide them with this special calendar link:
 [CALENDAR_LINK: Inaugural Thurston AI Business Summit | January 20, 2026 | 9:00 AM - 10:30 AM | Thurston County, WA]
 
 This will be automatically converted to a clickable Google Calendar link by the interface.`,
