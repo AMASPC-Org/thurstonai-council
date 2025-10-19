@@ -1,12 +1,39 @@
 import { Link } from 'wouter';
+import { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import EventAgenda from '@/components/EventAgenda';
 import RegistrationForm from '@/components/RegistrationForm';
+import { usePayment } from '@/contexts/PaymentContext';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Summit() {
+  const { paymentSuccess, registrationId } = usePayment();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Check URL parameters for payment success on mount
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("payment") === "success") {
+      // Show success toast
+      toast({
+        title: "Payment Successful!",
+        description: "Your registration for the summit is confirmed. Check your email for details.",
+        duration: 5000,
+      });
+    } else if (params.get("payment") === "cancelled") {
+      // Show cancellation toast
+      toast({
+        title: "Payment Cancelled",
+        description: "Your registration was not completed. You can try again when you're ready.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    }
+  }, [toast]);
+
   return (
     <div className="min-h-screen">
       {/* Page Hero with Event Logo */}

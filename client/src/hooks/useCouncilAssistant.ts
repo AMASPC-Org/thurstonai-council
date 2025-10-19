@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface Message {
   id: string;
@@ -7,8 +7,10 @@ interface Message {
   timestamp: Date;
 }
 
-export function useCouncilAssistant() {
-  const [messages, setMessages] = useState<Message[]>([]);
+export function useCouncilAssistant(initialMessage?: Message) {
+  const [messages, setMessages] = useState<Message[]>(() => {
+    return initialMessage ? [initialMessage] : [];
+  });
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);

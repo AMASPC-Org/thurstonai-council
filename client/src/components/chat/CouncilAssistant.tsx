@@ -5,9 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCouncilAssistant } from "@/hooks/useCouncilAssistant";
+import { usePayment } from "@/contexts/PaymentContext";
 import { Send, Loader2, RotateCcw, X } from "lucide-react";
 
 export default function CouncilAssistant() {
+  const { paymentSuccess, clearPaymentSuccess } = usePayment();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  
+  // Create initial message if payment was successful
+  const initialMessage = paymentSuccess 
+    ? {
+        id: `assistant-welcome-${Date.now()}`,
+        role: "assistant" as const,
+        content: "Welcome back! Your registration is confirmed. Would you like to add the summit to your calendar?",
+        timestamp: new Date(),
+      } 
+    : undefined;
+  
   const {
     messages,
     input,
@@ -16,9 +30,7 @@ export default function CouncilAssistant() {
     sendMessage,
     clearMessages,
     cancelRequest,
-  } = useCouncilAssistant();
-
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  } = useCouncilAssistant(initialMessage);
 
   // Parse message content and replace page mentions with clickable links
   const parseMessageContent = (content: string) => {
@@ -126,6 +138,13 @@ export default function CouncilAssistant() {
 
     return parts;
   };
+
+  // Clear payment success flag after showing the message
+  useEffect(() => {
+    if (paymentSuccess) {
+      clearPaymentSuccess();
+    }
+  }, [paymentSuccess, clearPaymentSuccess]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
