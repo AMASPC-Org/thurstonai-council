@@ -14,16 +14,19 @@ export default function Summit() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check URL parameters for payment success on mount
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("payment") === "success") {
+    // Show toast based on payment context state
+    if (paymentSuccess) {
       // Show success toast
       toast({
         title: "Payment Successful!",
         description: "Your registration for the summit is confirmed. Check your email for details.",
         duration: 5000,
       });
-    } else if (params.get("payment") === "cancelled") {
+    }
+    
+    // Also check URL for cancelled payment (not tracked in context)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("payment") === "cancelled") {
       // Show cancellation toast
       toast({
         title: "Payment Cancelled",
@@ -32,7 +35,7 @@ export default function Summit() {
         duration: 5000,
       });
     }
-  }, [toast]);
+  }, [paymentSuccess, toast]);
 
   return (
     <div className="min-h-screen">
