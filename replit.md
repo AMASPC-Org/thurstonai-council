@@ -4,7 +4,7 @@
 
 The Thurston AI Business Council website is a professional, civic-focused platform designed to promote and facilitate registration for the inaugural AI Business Summit in Thurston County. The site serves as the primary digital presence for a community-led initiative helping local businesses, non-profits, and leaders understand and adapt to AI technology.
 
-The application is built as a modern single-page application (SPA) with a React frontend and Express backend, featuring a clean, authoritative design that balances government-style credibility with contemporary tech aesthetics.
+The application is built as a modern single-page application (SPA) with a React frontend and Express backend, featuring a clean, authoritative design that balances government-style credibility with contemporary tech aesthetics. It includes an AI assistant powered by Google's Gemini API that can answer questions about the council and help users register for events using native function calling.
 
 ## User Preferences
 
