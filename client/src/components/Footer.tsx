@@ -81,16 +81,16 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-base font-semibold">Initiative Partner</h3>
             <p className="text-sm opacity-90">
-              The Thurston AI Business Council is an initiative powered by the{' '}
-              <a 
-                href="https://amaspc.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="underline hover:opacity-100 transition-opacity"
-              >
-                American Marketing Alliance SPC
-              </a>.
+              The Thurston AI Business Council is an initiative powered by the American Marketing Alliance SPC.
             </p>
+            <a 
+              href="https://amaspc.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm underline hover:opacity-100 transition-opacity inline-block"
+            >
+              Visit AMA SPC Website →
+            </a>
             <p className="text-xs opacity-75 pt-4 border-t border-white/20">
               © 2025 | Thurston AI Business Council
             </p>
