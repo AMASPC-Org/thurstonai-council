@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'wouter';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import Logo from './Logo';
+import type { User as UserType } from '@shared/schema';
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -14,6 +16,12 @@ const navItems = [
 export default function Navigation() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Check if user is logged in (this will fail silently if not authenticated)
+  const { data: user } = useQuery<UserType>({
+    queryKey: ["/api/auth/me"],
+    retry: false,
+  });
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white border-b border-border shadow-sm">
@@ -38,6 +46,31 @@ export default function Navigation() {
                 {item.label}
               </Link>
             ))}
+            
+            {/* Authentication Links */}
+            <div className="flex items-center gap-3 ml-4 pl-4 border-l">
+              {user ? (
+                <Link href="/profile">
+                  <Button variant="ghost" size="sm" data-testid="button-profile">
+                    <User className="h-4 w-4 mr-2" />
+                    Profile
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/signin">
+                    <Button variant="ghost" size="sm" data-testid="button-signin">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button variant="default" size="sm" data-testid="button-signup">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -69,6 +102,40 @@ export default function Navigation() {
                   {item.label}
                 </Link>
               ))}
+              
+              {/* Mobile Authentication Links */}
+              <div className="border-t pt-2 mt-2">
+                {user ? (
+                  <Link
+                    href="/profile"
+                    className="block px-3 py-2 text-base font-medium transition-colors hover:bg-accent text-foreground"
+                    onClick={() => setMobileMenuOpen(false)}
+                    data-testid="link-mobile-profile"
+                  >
+                    <User className="inline-block h-4 w-4 mr-2" />
+                    Profile
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/signin"
+                      className="block px-3 py-2 text-base font-medium transition-colors hover:bg-accent text-foreground"
+                      onClick={() => setMobileMenuOpen(false)}
+                      data-testid="link-mobile-signin"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="block px-3 py-2 text-base font-medium transition-colors hover:bg-accent text-foreground"
+                      onClick={() => setMobileMenuOpen(false)}
+                      data-testid="link-mobile-signup"
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         )}

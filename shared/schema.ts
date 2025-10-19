@@ -5,13 +5,23 @@ import { z } from "zod";
 
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
+  email: text("email").notNull().unique(),
   password: text("password").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  organization: text("organization"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  emailVerified: timestamp("email_verified"),
+  accountStatus: text("account_status").notNull().default("active"), // active, suspended, deleted
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
+  email: true,
   password: true,
+  firstName: true,
+  lastName: true,
+  organization: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -20,6 +30,7 @@ export type User = typeof users.$inferSelect;
 // Summit Registration Schema
 export const registrations = pgTable("registrations", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id), // Optional link to user account
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull().unique(),

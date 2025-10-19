@@ -18,6 +18,9 @@ import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Refund from "@/pages/Refund";
 import AiSafety from "@/pages/AiSafety";
+import SignUp from "@/pages/SignUp";
+import SignIn from "@/pages/SignIn";
+import Profile from "@/pages/Profile";
 import CookieNotice from "@/components/CookieNotice";
 
 function Router() {
@@ -38,6 +41,9 @@ function Router() {
           <Route path="/terms" component={Terms} />
           <Route path="/refund" component={Refund} />
           <Route path="/ai-safety" component={AiSafety} />
+          <Route path="/signup" component={SignUp} />
+          <Route path="/signin" component={SignIn} />
+          <Route path="/profile" component={Profile} />
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>
