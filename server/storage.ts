@@ -12,8 +12,15 @@ export interface IStorage {
   // Registration methods
   createRegistration(registration: InsertRegistration): Promise<Registration>;
   getRegistrationByEmail(email: string): Promise<Registration | undefined>;
+  getRegistrationById(id: string): Promise<Registration | undefined>;
   getAllRegistrations(): Promise<Registration[]>;
   getRegistrationCount(): Promise<number>;
+  updateRegistrationPayment(id: string, paymentData: {
+    paymentStatus: string;
+    stripeSessionId?: string;
+    stripePaymentIntentId?: string;
+    paidAt?: Date;
+  }): Promise<Registration | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -47,7 +54,11 @@ export class MemStorage implements IStorage {
     const registration: Registration = { 
       ...insertRegistration, 
       id,
-      registeredAt: new Date()
+      registeredAt: new Date(),
+      paymentStatus: insertRegistration.paymentStatus || "pending",
+      stripePaymentIntentId: null,
+      stripeSessionId: null,
+      paidAt: null
     };
     this.registrations.set(id, registration);
     return registration;
@@ -59,6 +70,10 @@ export class MemStorage implements IStorage {
     );
   }
 
+  async getRegistrationById(id: string): Promise<Registration | undefined> {
+    return this.registrations.get(id);
+  }
+
   async getAllRegistrations(): Promise<Registration[]> {
     return Array.from(this.registrations.values()).sort(
       (a, b) => b.registeredAt.getTime() - a.registeredAt.getTime()
@@ -67,6 +82,27 @@ export class MemStorage implements IStorage {
 
   async getRegistrationCount(): Promise<number> {
     return this.registrations.size;
+  }
+
+  async updateRegistrationPayment(id: string, paymentData: {
+    paymentStatus: string;
+    stripeSessionId?: string;
+    stripePaymentIntentId?: string;
+    paidAt?: Date;
+  }): Promise<Registration | undefined> {
+    const registration = this.registrations.get(id);
+    if (!registration) return undefined;
+    
+    const updated = {
+      ...registration,
+      paymentStatus: paymentData.paymentStatus,
+      stripeSessionId: paymentData.stripeSessionId || registration.stripeSessionId,
+      stripePaymentIntentId: paymentData.stripePaymentIntentId || registration.stripePaymentIntentId,
+      paidAt: paymentData.paidAt || registration.paidAt
+    };
+    
+    this.registrations.set(id, updated);
+    return updated;
   }
 }
 

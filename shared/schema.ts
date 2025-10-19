@@ -25,11 +25,18 @@ export const registrations = pgTable("registrations", {
   email: text("email").notNull().unique(),
   organization: text("organization").notNull(),
   registeredAt: timestamp("registered_at").notNull().defaultNow(),
+  paymentStatus: text("payment_status").notNull().default("pending"), // pending, paid, scholarship
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  stripeSessionId: text("stripe_session_id"),
+  paidAt: timestamp("paid_at"),
 });
 
 export const insertRegistrationSchema = createInsertSchema(registrations).omit({
   id: true,
   registeredAt: true,
+  paidAt: true,
+  stripePaymentIntentId: true,
+  stripeSessionId: true,
 });
 
 export type InsertRegistration = z.infer<typeof insertRegistrationSchema>;

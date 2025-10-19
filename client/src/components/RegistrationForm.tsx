@@ -6,7 +6,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { Loader2, CreditCard } from 'lucide-react';
 
 export default function RegistrationForm() {
   const { toast } = useToast();
@@ -32,18 +32,54 @@ export default function RegistrationForm() {
         body: JSON.stringify({
           ...formData,
           requestScholarship,
-          paymentType: requestScholarship ? 'scholarship' : 'paid'
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        toast({
-          title: "Registration Successful!",
-          description: data.message || "You've reserved your seat for the inaugural summit.",
-        });
-        setFormData({ firstName: '', lastName: '', email: '', organization: '' });
+        if (data.needsPayment && data.registration?.id) {
+          // Redirect to Stripe checkout
+          try {
+            const checkoutResponse = await fetch('/api/create-checkout-session', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                registrationId: data.registration.id,
+              }),
+            });
+
+            const checkoutData = await checkoutResponse.json();
+
+            if (checkoutData.url) {
+              // Redirect to Stripe Checkout
+              window.location.href = checkoutData.url;
+            } else {
+              toast({
+                title: "Payment Setup Error",
+                description: "Unable to create payment session. Please try again.",
+                variant: "destructive",
+              });
+            }
+          } catch (paymentError) {
+            console.error('Payment setup error:', paymentError);
+            toast({
+              title: "Payment Setup Failed",
+              description: "Unable to process payment. Please try again or contact support.",
+              variant: "destructive",
+            });
+          }
+        } else {
+          // Scholarship request successful
+          toast({
+            title: "Registration Successful!",
+            description: data.message || "You've reserved your seat for the inaugural summit.",
+          });
+          setFormData({ firstName: '', lastName: '', email: '', organization: '' });
+          setRequestScholarship(false);
+        }
       } else {
         toast({
           title: "Registration Failed",
@@ -159,12 +195,11 @@ export default function RegistrationForm() {
           {/* Payment Note */}
           {!requestScholarship && (
             <div className="p-3 bg-primary/5 rounded-lg border border-primary/20 flex gap-2">
-              <AlertCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+              <CreditCard className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-medium text-primary">Payment Information</p>
+                <p className="font-medium text-primary">Secure Payment via Stripe</p>
                 <p className="text-muted-foreground">
-                  You'll receive payment instructions via email after registration. 
-                  Payment is due within 48 hours to confirm your seat.
+                  After registration, you'll be redirected to our secure payment page to complete your $25 ticket purchase.
                 </p>
               </div>
             </div>
@@ -180,10 +215,10 @@ export default function RegistrationForm() {
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Submitting...
+                Processing...
               </>
             ) : (
-              requestScholarship ? 'Submit Scholarship Request' : 'Register & Continue to Payment'
+              requestScholarship ? 'Submit Scholarship Request' : 'Continue to Payment'
             )}
           </Button>
         </form>
