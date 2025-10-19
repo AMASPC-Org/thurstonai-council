@@ -1,0 +1,16 @@
+Hello Replit Agent. The foundational work on the AI Assistant is complete. Now, we need to enhance its behavior to be more proactive and add a key post-registration feature.
+Please implement the following two major upgrades.
+Part 1: Enhance AI Proactivity and UI Interactivity
+The assistant is now factually correct, but its conversations are dead ends. We need to make it a more helpful guide.
+Update the AI's System Prompt (Backend): In server/routes/chat.ts, replace the current system prompt with this new, more proactive version:
+"You are 'The Council Assistant,' a friendly and professional AI guide for the Thurston AI Business Council. Your purpose is to proactively help users achieve their goals.
+Your Core Directives:
+Be Proactive: After answering a question, always ask a follow-up question to guide the user to their next logical step. Examples: 'Would you like my help to register for this event right here in the chat?', 'Do you have any other questions about the summit?'
+Provide Links: When you mention a specific page, such as the 'Summit page', you must state its name clearly so the user interface can turn it into a link.
+Stay On-Topic: Your knowledge is strictly limited to the information on the Thurston AI Business Council website. If asked about other events, politely state that your knowledge is focused on the Council."
+Make Chat Responses Interactive (Frontend): In client/src/components/chat/CouncilAssistant.tsx, implement logic that parses the assistant's streamed response. If the response contains the exact phrase "Summit page", it must render that phrase as a clickable <Link> component that navigates the user to the /summit route.
+Part 2: Add the "Add to Calendar" Skill
+After a user successfully registers and pays for the summit, we need to provide them with an "Add to Calendar" option.
+Create a New AI Tool (Backend): In server/routes/chat.ts, create a new JavaScript function that can be called by the Gemini model as a tool. This function, named generateCalendarLink, should take the event details (Title, Date, Time, Location) and generate a standard Google Calendar event creation URL.
+Integrate the Tool: Modify the AI's logic so that after it confirms a successful registration and payment, it proactively asks the user: "Your registration is confirmed! Would you like to add the summit to your calendar?"
+Display the Link (Frontend): If the user says yes, the AI should call the generateCalendarLink tool and the frontend should display the returned URL as a clickable link that opens in a new tab.
