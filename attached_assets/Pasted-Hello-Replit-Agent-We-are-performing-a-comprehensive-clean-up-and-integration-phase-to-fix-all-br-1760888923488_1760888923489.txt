@@ -1,0 +1,22 @@
+Hello Replit Agent. We are performing a comprehensive "clean up and integration" phase to fix all broken pieces and build out the remaining foundational features for a complete end-to-end user experience.
+Please execute the following four parts in order.
+Part 1: Critical Fixes for the Core Registration Flow
+These two issues are blocking the primary user journey and must be fixed first.
+Fix the Database Schema: In shared/schema.ts, update the registrations table schema to include the following required text fields: organization, title, and sector.
+Fix the Stripe Redirect: In client/src/hooks/useCouncilAssistant.ts (or wherever the redirect is handled), find the line window.location.href = data.url;. Change it to window.open(data.url, '_blank');. This will open the Stripe Checkout page in a new tab and solve the Replit preview issue.
+Part 2: Build the Admin Dashboard for Event Management
+The event manager needs a way to view and manage registrations.
+Create a Protected Admin Route: Create a new page component at client/src/pages/Admin.tsx. This page must be protected; it should only be accessible to users with an "admin" role (you can hardcode your user ID for now).
+Build the Backend Endpoint: Create a new, secure API endpoint that fetches all records from the registrations table.
+Create the Admin UI: On the /admin page, display the registration data in a simple table with columns for Name, Email, Organization, and Payment Status. Add a button to "Export as CSV" for printing a check-in list.
+Part 3: Implement Full User Account & Google OAuth Functionality
+The foundation for accounts exists. Now, we need to make it functional.
+Implement Backend Authentication: In the server, create the API endpoints to handle user sign-up (with password hashing using bcrypt) and sign-in (creating a session).
+Integrate Google OAuth:
+Install the passport and passport-google-oauth20 packages.
+Configure Passport.js with your Google OAuth credentials from your Google Cloud project (store them in Replit Secrets).
+Add a "Sign in with Google" button to the SignIn.tsx page that triggers this new authentication flow.
+Part 4: Enhance the AI's Skills and Statefulness
+Finally, let's make the AI smarter and more conversational.
+Add AI Statefulness: In server/routes/chat.ts, before starting a new conversation, add logic to check if the user's email (if they are logged in) exists in the registrations table. Pass this information (e.g., isRegistered: true) into the system prompt so the AI is aware of the user's status.
+Implement True Conversational Registration: Refactor the initiateSummitRegistration tool. It should now be a multi-turn flow where the AI asks for information one piece at a time, validates it, and gets confirmation from the user before creating the Stripe session.

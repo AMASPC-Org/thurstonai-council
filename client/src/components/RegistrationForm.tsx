@@ -54,8 +54,8 @@ export default function RegistrationForm() {
             const checkoutData = await checkoutResponse.json();
 
             if (checkoutData.url) {
-              // Redirect to Stripe Checkout
-              window.location.href = checkoutData.url;
+              // Open Stripe Checkout in new tab to avoid Replit preview issues
+              window.open(checkoutData.url, '_blank');
             } else {
               toast({
                 title: "Payment Setup Error",

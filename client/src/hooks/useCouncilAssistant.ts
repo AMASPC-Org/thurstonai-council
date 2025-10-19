@@ -97,8 +97,8 @@ export function useCouncilAssistant(initialMessage?: Message) {
               }
               
               if (data.checkoutUrl) {
-                // Redirect to Stripe checkout
-                window.location.href = data.checkoutUrl;
+                // Open Stripe checkout in new tab to avoid Replit preview issues
+                window.open(data.checkoutUrl, '_blank');
                 break;
               }
               

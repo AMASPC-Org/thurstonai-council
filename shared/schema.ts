@@ -35,6 +35,8 @@ export const registrations = pgTable("registrations", {
   lastName: text("last_name").notNull(),
   email: text("email").notNull().unique(),
   organization: text("organization").notNull(),
+  title: text("title").notNull(),
+  sector: text("sector").notNull(),
   registeredAt: timestamp("registered_at").notNull().defaultNow(),
   paymentStatus: text("payment_status").notNull().default("pending"), // pending, paid, scholarship
   stripePaymentIntentId: text("stripe_payment_intent_id"),
