@@ -1,14 +1,14 @@
 # Summit Details
 
-The Inaugural Thurston AI Business Summit is a free, in-person event on Tuesday, January 20, 2026, from 9:00 AM to 10:30 AM. It is hosted in partnership with the Thurston EDC. Seating is limited and registration is required. The agenda includes networking, a keynote, and a local leader panel.
+The Inaugural Thurston AI Business Summit is a paid, in-person event on Tuesday, January 20, 2026, from 9:00 AM to 10:30 AM. Tickets cost $25 per person and must be purchased online in advance using Stripe. It is hosted in partnership with the Thurston EDC. Seating is limited and registration is only confirmed after successful payment. The agenda includes networking, a keynote, and a local leader panel.
 
 ## Event Information
 - **Date**: Tuesday, January 20, 2026
 - **Time**: 9:00 AM - 10:30 AM (doors open at 8:30 AM)
 - **Format**: In-person event
 - **Duration**: 90 minutes of high-impact content
-- **Cost**: FREE (previously $25, now sponsored)
-- **Registration**: Required due to limited seating
+- **Cost**: $25 per person (paid online via Stripe)
+- **Registration**: Required with payment to secure your seat
 
 ## Agenda
 1. **8:30 AM**: Doors open, coffee and networking

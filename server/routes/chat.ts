@@ -47,9 +47,9 @@ ${knowledgeContent}
 
 Additional context and capabilities:
 - The website has multiple pages including: Home, About the Council, The Inaugural Summit, Get Involved, Sponsorship, Speaker Application, Partnership Opportunities, and Membership Application
-- Registration for the summit is FREE (previously was $25 but is now sponsored)
-- To register, direct users to the Summit page at /summit where they can fill out the registration form
-- Scholarships were previously available but are no longer needed since the event is now free
+- Registration for the summit costs $25 per person and requires payment via Stripe
+- To register, direct users to the Summit page at /summit where they can fill out the registration form and complete payment
+- Scholarships are available for those who need financial assistance
 - The website includes legal pages (Privacy Policy, Terms of Use, Refund Policy) accessible from the footer
 - We use cookies to enhance the browsing experience, with a notice shown to new visitors
 

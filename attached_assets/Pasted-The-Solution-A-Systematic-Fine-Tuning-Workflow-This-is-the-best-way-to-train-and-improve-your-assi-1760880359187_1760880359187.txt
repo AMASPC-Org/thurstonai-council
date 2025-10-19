@@ -1,0 +1,24 @@
+The Solution: A Systematic Fine-Tuning Workflow
+This is the best way to train and improve your assistant. It's a simple loop: Test -> Identify Gap -> Update Knowledge -> Retest.
+1. The Golden Rule: The AI can only know what is in its knowledge base. If a fact is wrong or missing from the /shared/knowledge_base/ files, the AI's answer will be wrong.
+2. The Immediate Fix: Let's fix the specific error you found. The AI said the event was free because nothing in its knowledge base told it otherwise.
+Action: Open the file shared/knowledge_base/summit_details.md.
+Update it with this text:
+The Inaugural Thurston AI Business Summit is a paid, in-person event on Tuesday, January 20, 2026, from 9:00 AM to 10:30 AM. Tickets cost $25 per person and must be purchased online in advance using Stripe. It is hosted in partnership with the Thurston EDC. Seating is limited and registration is only confirmed after successful payment.
+3. Update the AI's Core Instructions: We also need to make the AI more strict.
+Action: In server/routes/chat.ts, find the system prompt.
+Update it with this text:
+"You are 'The Council Assistant,' a friendly and professional AI guide for the Thurston AI Business Council. You must base your answers ONLY on the information provided in the knowledge base context. If the answer is not in the provided context, you must say 'I do not have that information.' Your purpose is to help users learn about the council, register for events, and find information on our website."
+This simple change forces the AI to be factual and prevents it from making assumptions.
+The Next Skill: "Add to Calendar"
+This is an excellent idea and a crucial part of a professional event experience. We should absolutely add this.
+This will be our new Prompt #5. It should be implemented after we are confident the payment and registration flow is working perfectly. This skill will be a new function that the AI can call. When a user successfully registers, the AI will be prompted to ask, "Would you like to add this event to your calendar?" If the user says yes, the AI will call a new createCalendarInvite() function that generates a Google Calendar link or an .ics file.
+Your Role as the "Middleman": The Diagnostic Prompt
+You are right to ask for a structured way to get information. When the AI gives a confusing or wrong answer, you need to quickly diagnose why.
+Here is a Diagnostic Prompt you can give to the Replit assistant at any time. The goal of this prompt is to extract the three key pieces of information I (Gemini) need to help you debug the AI's behavior.
+Your Prompt to the Replit Assistant:
+Please provide a diagnostic summary of "The Council Assistant's" current configuration. I need the following three things:
+The full, current System Prompt being sent to the Gemini model.
+The complete, current contents of all Markdown files in the /shared/knowledge_base/ directory.
+A list of all available function names that the Gemini model can call as "tools" (e.g., purchaseTicketWithStripe, searchKnowledgeBase).
+By giving the Replit assistant this prompt, you can copy and paste its output to me. With that information, I can precisely identify why the AI is behaving a certain way and give you the exact fix, whether it's a change to the knowledge base, the system prompt, or the function logic.
