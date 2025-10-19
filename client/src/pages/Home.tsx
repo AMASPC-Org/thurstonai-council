@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Brain, Users, Target, TrendingUp, Handshake, Compass, FileText, GraduationCap, BookOpen, ArrowRight } from 'lucide-react';
 import HeroBackground from '@/components/HeroBackground';
+import CouncilAssistant from '@/components/chat/CouncilAssistant';
 
 export default function Home() {
   return (
@@ -39,6 +40,20 @@ export default function Home() {
               90-minute summit • Practical insights • Local networking
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* AI Assistant Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-semibold mb-4">Get Instant Answers</h2>
+            <p className="text-lg text-muted-foreground">
+              Have questions about the council, our events, or how AI can benefit your business? 
+              Chat with our AI assistant for immediate assistance.
+            </p>
+          </div>
+          <CouncilAssistant />
         </div>
       </section>
 
