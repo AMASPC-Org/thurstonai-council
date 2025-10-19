@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
@@ -79,6 +79,28 @@ When assisting users:
 
 Remember: The knowledge base content above is your authoritative source. Always cite specific details from it when answering questions.`;
 
+// Function to generate Google Calendar link
+function generateCalendarLink(title: string, date: string, startTime: string, endTime: string, location: string, details: string) {
+  // Parse the date and times (expecting format like "2026-01-20", "09:00", "10:30")
+  const startDateTime = new Date(`${date}T${startTime}:00`);
+  const endDateTime = new Date(`${date}T${endTime}:00`);
+  
+  // Format dates for Google Calendar (YYYYMMDDTHHmmss)
+  const formatGoogleDate = (d: Date) => {
+    return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  };
+  
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: title,
+    dates: `${formatGoogleDate(startDateTime)}/${formatGoogleDate(endDateTime)}`,
+    location: location,
+    details: details
+  });
+  
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
 // Chat endpoint for Council Assistant
 chatRouter.post("/api/chat", async (req, res) => {
   try {
@@ -91,7 +113,14 @@ chatRouter.post("/api/chat", async (req, res) => {
     // Initialize the model
     const model = genAI.getGenerativeModel({ 
       model: "gemini-2.0-flash-exp",
-      systemInstruction: SYSTEM_PROMPT,
+      systemInstruction: SYSTEM_PROMPT + `
+
+CALENDAR FEATURE: After a user confirms they have registered and paid for the summit, you should proactively ask: "Your registration is confirmed! Would you like to add the summit to your calendar?"
+
+If they say yes, provide them with this special calendar link that they can click to add the event:
+[CALENDAR_LINK: Inaugural Thurston AI Business Summit | January 20, 2026 | 9:00 AM - 10:30 AM | Thurston County, WA]
+
+This will be automatically converted to a clickable Google Calendar link by the interface.`,
     });
 
     // Convert messages to Gemini format

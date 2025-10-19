@@ -22,7 +22,71 @@ export default function CouncilAssistant() {
 
   // Parse message content and replace page mentions with clickable links
   const parseMessageContent = (content: string) => {
-    // Map of phrases to their routes
+    // First, check for calendar links
+    const calendarLinkRegex = /\[CALENDAR_LINK: ([^\]]+)\]/g;
+    let parts: (string | JSX.Element)[] = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = calendarLinkRegex.exec(content)) !== null) {
+      // Add text before the calendar link
+      if (match.index > lastIndex) {
+        parts.push(content.substring(lastIndex, match.index));
+      }
+
+      // Parse the calendar link details
+      const details = match[1].split(' | ');
+      const title = details[0] || "Inaugural Thurston AI Business Summit";
+      const date = "2026-01-20";
+      const startTime = "09:00";
+      const endTime = "10:30";
+      const location = details[3] || "Thurston County, WA";
+      const eventDetails = "Join the Thurston AI Business Council for the inaugural summit on AI in business.";
+
+      // Generate Google Calendar link
+      const startDateTime = new Date(`${date}T${startTime}:00`);
+      const endDateTime = new Date(`${date}T${endTime}:00`);
+      
+      const formatGoogleDate = (d: Date) => {
+        return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '').replace('Z', '');
+      };
+      
+      const params = new URLSearchParams({
+        action: 'TEMPLATE',
+        text: title,
+        dates: `${formatGoogleDate(startDateTime)}/${formatGoogleDate(endDateTime)}`,
+        location: location,
+        details: eventDetails
+      });
+      
+      const calendarUrl = `https://calendar.google.com/calendar/render?${params.toString()}`;
+
+      parts.push(
+        <a
+          key={`calendar-${match.index}`}
+          href={calendarUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 px-3 py-1 bg-primary text-primary-foreground rounded-md hover:opacity-90 font-medium text-sm"
+        >
+          📅 Add to Google Calendar
+        </a>
+      );
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Add any remaining text
+    if (lastIndex < content.length) {
+      parts.push(content.substring(lastIndex));
+    }
+
+    // If no calendar links were found, process the entire content
+    if (parts.length === 0) {
+      parts = [content];
+    }
+
+    // Now process page links
     const pageLinks = [
       { phrase: "Summit page", route: "/summit" },
       { phrase: "About page", route: "/about" },
@@ -30,39 +94,46 @@ export default function CouncilAssistant() {
       { phrase: "Sponsorship page", route: "/sponsorship" },
     ];
 
-    let parts: (string | JSX.Element)[] = [content];
-
-    // Process each page link
-    pageLinks.forEach(({ phrase, route }) => {
-      const newParts: (string | JSX.Element)[] = [];
-      
-      parts.forEach((part) => {
-        if (typeof part === "string") {
+    const newParts: (string | JSX.Element)[] = [];
+    
+    parts.forEach((part) => {
+      if (typeof part === "string") {
+        let currentPart = part;
+        
+        pageLinks.forEach(({ phrase, route }) => {
           const regex = new RegExp(`(${phrase})`, "gi");
-          const splits = part.split(regex);
+          const splits = currentPart.split(regex);
           
-          splits.forEach((split, index) => {
-            if (split.toLowerCase() === phrase.toLowerCase()) {
-              newParts.push(
-                <Link key={`${route}-${index}`} href={route}>
-                  <a className="underline hover:opacity-80 cursor-pointer font-medium">
-                    {split}
-                  </a>
-                </Link>
-              );
-            } else if (split) {
-              newParts.push(split);
-            }
-          });
+          if (splits.length > 1) {
+            const subParts: (string | JSX.Element)[] = [];
+            splits.forEach((split, index) => {
+              if (split.toLowerCase() === phrase.toLowerCase()) {
+                subParts.push(
+                  <Link key={`${route}-${index}`} href={route}>
+                    <a className="underline hover:opacity-80 cursor-pointer font-medium">
+                      {split}
+                    </a>
+                  </Link>
+                );
+              } else if (split) {
+                subParts.push(split);
+              }
+            });
+            currentPart = subParts as any;
+          }
+        });
+        
+        if (Array.isArray(currentPart)) {
+          newParts.push(...currentPart);
         } else {
-          newParts.push(part);
+          newParts.push(currentPart);
         }
-      });
-      
-      parts = newParts;
+      } else {
+        newParts.push(part);
+      }
     });
 
-    return parts;
+    return newParts.length > 0 ? newParts : parts;
   };
 
   // Auto-scroll to bottom when new messages arrive
