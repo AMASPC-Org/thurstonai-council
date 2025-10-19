@@ -2,11 +2,16 @@ import { Router } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
 
 const chatRouter = Router();
 
 // Initialize Gemini AI with API key
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+
+// Get directory paths for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Function to load knowledge base files
 function loadKnowledgeBase(): string {
