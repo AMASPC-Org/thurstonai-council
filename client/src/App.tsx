@@ -22,6 +22,7 @@ import AiSafety from "@/pages/AiSafety";
 import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
 import Profile from "@/pages/Profile";
+import Admin from "@/pages/Admin";
 import CookieNotice from "@/components/CookieNotice";
 
 function Router() {
@@ -45,6 +46,7 @@ function Router() {
           <Route path="/signup" component={SignUp} />
           <Route path="/signin" component={SignIn} />
           <Route path="/profile" component={Profile} />
+          <Route path="/admin" component={Admin} />
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>

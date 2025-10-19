@@ -190,6 +190,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch registrations" });
     }
   });
+  
+  // Admin endpoint to get all registrations with auth check
+  app.get("/api/admin/registrations", async (req, res) => {
+    try {
+      // Check if user is authenticated (basic check for now)
+      // In production, you should verify admin role
+      if (!req.session?.user) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      
+      const registrations = await storage.getAllRegistrations();
+      res.json(registrations);
+    } catch (error) {
+      console.error("Error fetching registrations:", error);
+      res.status(500).json({ error: "Failed to fetch registrations" });
+    }
+  });
 
   const httpServer = createServer(app);
 
