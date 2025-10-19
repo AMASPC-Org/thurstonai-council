@@ -74,6 +74,13 @@ export default function Footer() {
                   </a>
                 </Link>
               </li>
+              <li>
+                <Link href="/ai-safety">
+                  <a className="opacity-90 hover:opacity-100 transition-opacity">
+                    AI & Data Safety
+                  </a>
+                </Link>
+              </li>
             </ul>
           </div>
           

@@ -17,6 +17,7 @@ import NotFound from "@/pages/not-found";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Refund from "@/pages/Refund";
+import AiSafety from "@/pages/AiSafety";
 import CookieNotice from "@/components/CookieNotice";
 
 function Router() {
@@ -36,6 +37,7 @@ function Router() {
           <Route path="/privacy" component={Privacy} />
           <Route path="/terms" component={Terms} />
           <Route path="/refund" component={Refund} />
+          <Route path="/ai-safety" component={AiSafety} />
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>
