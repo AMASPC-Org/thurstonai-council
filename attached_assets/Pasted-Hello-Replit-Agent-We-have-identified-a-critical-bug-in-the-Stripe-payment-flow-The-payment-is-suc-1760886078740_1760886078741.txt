@@ -1,0 +1,20 @@
+Hello Replit Agent. We have identified a critical bug in the Stripe payment flow. The payment is succeeding, but the user is not being redirected back to our site correctly.
+Your task is to fix the redirect URL and implement a seamless post-payment confirmation experience.
+Please execute the following two parts in order.
+Part 1: Fix the Stripe Success URL (Backend)
+The application is incorrectly generating a localhost:5000 URL for the Stripe redirect. We must fix it to use the public Replit URL.
+Locate the Stripe Checkout Logic: In server/routes/chat.ts (or wherever the stripe.checkout.sessions.create call is made), find the line that defines the success_url.
+Update the URL Generation Logic: The current logic is likely checking process.env.NODE_ENV and defaulting to localhost. You must modify it to always use the public Replit URL. The correct URL can be constructed using the process.env.REPL_SLUG environment variable. The new success_url should be:
+https://[your-repl-slug].replit.dev/summit?payment=success&registration={registration.id}
+(Replace [your-repl-slug] with the dynamic value from process.env.REPL_SLUG).
+Part 2: Implement the Automated Post-Payment Confirmation Flow
+Once the user is correctly redirected back to the site, the AI needs to be aware of their success and guide them to the next step.
+Detect Successful Payment (Frontend):
+Modify the client/src/pages/Summit.tsx page component.
+It needs to check the URL for the ?payment=success query parameter as soon as the page loads.
+If this parameter is present, you must set a flag in a global state (like a React Context or a simple state management store) to indicate that a successful transaction has just occurred.
+Trigger the AI Confirmation (Frontend & AI):
+Modify the CouncilAssistant.tsx component and its useCouncilAssistant hook.
+When the chat component first loads, it must check for the "payment success" flag from the global state.
+If the flag is true, the assistant's very first message must override the default welcome message. It should be a confirmation and the proactive calendar offer: "Welcome back! Your registration is confirmed. Would you like to add the summit to your calendar?"
+After displaying this message, the "payment success" flag must be cleared so the message does not appear again on a page refresh.

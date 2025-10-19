@@ -131,8 +131,8 @@ async function initiateSummitRegistration(
         quantity: 1,
       }],
       mode: "payment",
-      success_url: `${process.env.NODE_ENV === 'production' ? 'https://' + process.env.REPL_SLUG + '.replit.app' : 'http://localhost:5000'}/summit?payment=success&registration=${registration.id}`,
-      cancel_url: `${process.env.NODE_ENV === 'production' ? 'https://' + process.env.REPL_SLUG + '.replit.app' : 'http://localhost:5000'}/summit?payment=cancelled`,
+      success_url: `https://${process.env.REPL_SLUG}.replit.dev/summit?payment=success&registration=${registration.id}`,
+      cancel_url: `https://${process.env.REPL_SLUG}.replit.dev/summit?payment=cancelled`,
       customer_email: email,
       metadata: {
         registrationId: registration.id,
