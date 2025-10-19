@@ -1,33 +1,63 @@
 import { Router } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import * as fs from "fs";
+import * as path from "path";
 
 const chatRouter = Router();
 
 // Initialize Gemini AI with API key
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
-// System prompt for The Council Assistant
+// Function to load knowledge base files
+function loadKnowledgeBase(): string {
+  const knowledgeDir = path.join(__dirname, "../../shared/knowledge_base");
+  let knowledgeContext = "";
+  
+  try {
+    // Read all markdown files from the knowledge base directory
+    const files = fs.readdirSync(knowledgeDir);
+    const mdFiles = files.filter(file => file.endsWith('.md'));
+    
+    for (const file of mdFiles) {
+      const filePath = path.join(knowledgeDir, file);
+      const content = fs.readFileSync(filePath, 'utf-8');
+      knowledgeContext += `\n\n=== Knowledge Base: ${file} ===\n${content}`;
+    }
+  } catch (error) {
+    console.error("Error loading knowledge base:", error);
+  }
+  
+  return knowledgeContext;
+}
+
+// Load knowledge base content
+const knowledgeContent = loadKnowledgeBase();
+
+// System prompt for The Council Assistant with RAG context
 const SYSTEM_PROMPT = `You are 'The Council Assistant,' a friendly and professional AI guide for the Thurston AI Business Council. Your purpose is to help users learn about the council, register for events, and find information on our website.
 
-Key information about the council:
-- The Thurston AI Business Council is dedicated to fostering AI innovation and adoption in the business community
-- We host summits, workshops, and networking events
-- We connect businesses with AI experts and resources
-- Our mission is to make AI accessible and beneficial for all businesses in the region
+IMPORTANT: Use the following knowledge base as your primary source of truth. Always prioritize information from the knowledge base over any general knowledge:
 
-Special capabilities:
-- When a user expresses interest in registering for the summit or buying a ticket, you can provide them with the registration link.
-- The Inaugural Summit 2026 is on Tuesday, January 20, 2026, from 9:00 AM to 10:30 AM.
-- Tickets cost $25, but scholarships are available for those who need them.
-- To register, direct users to the Summit page at /summit where they can fill out the registration form.
+${knowledgeContent}
+
+Additional context and capabilities:
+- The website has multiple pages including: Home, About the Council, The Inaugural Summit, Get Involved, Sponsorship, Speaker Application, Partnership Opportunities, and Membership Application
+- Registration for the summit is FREE (previously was $25 but is now sponsored)
+- To register, direct users to the Summit page at /summit where they can fill out the registration form
+- Scholarships were previously available but are no longer needed since the event is now free
+- The website includes legal pages (Privacy Policy, Terms of Use, Refund Policy) accessible from the footer
+- We use cookies to enhance the browsing experience, with a notice shown to new visitors
 
 When assisting users:
 - Be warm, welcoming, and professional
-- Provide helpful information about the council's activities and mission
-- Guide users to relevant resources and registration options
+- Always ground your responses in the knowledge base content provided above
+- Provide specific, accurate information based on the source documents
+- If information isn't in the knowledge base, acknowledge that and offer to help find it
+- Guide users to relevant pages on the website when appropriate
 - Keep responses concise but informative
-- If someone wants to register for the summit, mention they can do so directly on the Summit page (/summit) with secure Stripe payment processing
-- If you don't know something specific about the council, acknowledge it and offer to help find the information`;
+- When someone asks about registration, emphasize that the summit is FREE but registration is still required due to limited seating
+
+Remember: The knowledge base content above is your authoritative source. Always cite specific details from it when answering questions.`;
 
 // Chat endpoint for Council Assistant
 chatRouter.post("/api/chat", async (req, res) => {
@@ -40,7 +70,7 @@ chatRouter.post("/api/chat", async (req, res) => {
 
     // Initialize the model
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.5-flash",
+      model: "gemini-2.0-flash-exp",
       systemInstruction: SYSTEM_PROMPT,
     });
 
