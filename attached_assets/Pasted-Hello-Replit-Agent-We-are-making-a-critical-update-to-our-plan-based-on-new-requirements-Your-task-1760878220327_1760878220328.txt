@@ -1,0 +1,28 @@
+Hello Replit Agent. We are making a critical update to our plan based on new requirements. Your task is to implement three major changes: update the payment flow, add legal pages, and, most importantly, create a knowledge base to ground our AI assistant and prevent hallucinations.
+Please execute the following three parts in order.
+Part 1: Update Summit Payment Flow & Integrate Stripe
+The current "pay later via email" text on the summit page is a poor user experience. We need to replace it with a real-time payment flow using Stripe.
+Modify summit.html: Find the section that says "You'll receive your payment instructions via email..." and replace it with a clear call to action for direct payment.
+Integrate the Stripe API: Add a new skill to "The Council Assistant" and a corresponding button on the summit.html page for purchasing a ticket. This should use our Stripe API key (from Replit Secrets) to create a checkout session and process the payment.
+Update the Registration Logic: Modify the registration function so that a user is only added to the registrations table in our database after a successful Stripe payment confirmation.
+Part 2: Add Legal Pages and Cookie Notice
+To build trust and ensure compliance, we need to add standard legal pages and a cookie notice.
+Create Three New HTML Files:
+privacy.html
+terms.html
+refund.html
+Populate these files with professional, standard placeholder text for a Privacy Policy, Terms of Use, and an Event Refund Policy.
+Update the Website Footer: Add links to these three new pages in the footer of every page on the site.
+Add a Cookie Notice: Implement a simple, non-intrusive cookie consent banner at the bottom of the site. It should state that the site uses cookies and link to the new Privacy Policy.
+Part 3: Implement the AI Knowledge Base (RAG) to Prevent Hallucination
+This is the most critical step. We must ground "The Council Assistant" in a "source of truth" to stop it from inventing incorrect information.
+Create the Knowledge Base Directory: Create a new directory at this path: /shared/knowledge_base/.
+Create Knowledge Files: Inside this new directory, create three new Markdown (.md) files:
+council_mission.md
+summit_details.md
+sponsorship_info.md
+Populate the Knowledge Files: Add the following "source of truth" content to the files:
+In council_mission.md: "The Thurston AI Business Council is a community-led initiative powered by the American Marketing Alliance SPC. Its mission is to help local businesses and non-profits understand, adapt, and thrive in the era of AI through events, resources, and community."
+In summit_details.md: "The Inaugural Thurston AI Business Summit is a free, in-person event on Tuesday, January 20, 2026, from 9:00 AM to 10:30 AM. It is hosted in partnership with the Thurston EDC. Seating is limited and registration is required. The agenda includes networking, a keynote, and a local leader panel."
+In sponsorship_info.md: "Sponsorship opportunities are available for the Inaugural Summit. Sponsors help cover costs for the venue, coffee, and A/V. Interested parties should click the 'Learn More About Sponsorship' button on the 'Get Involved' page to send an email."
+Implement the RAG Skill: This is the core logic. Modify the backend API endpoint in server/routes/chat.ts. Before sending a user's query to the Gemini model, you must first perform a semantic search against the documents in the /shared/knowledge_base/ directory. Prepend the most relevant text from your search results to the user's query as context. The final prompt to the Gemini model should follow this structure: "Based ONLY on the following context, answer the user's question. If the answer is not in the context, say 'I do not have that information.' Context: [retrieved text from knowledge base]. User Question: [original user question]."
