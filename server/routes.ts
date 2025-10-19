@@ -3,8 +3,12 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertRegistrationSchema } from "@shared/schema";
 import { z } from "zod";
+import chatRouter from "./routes/chat";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Use chat router for Council Assistant
+  app.use(chatRouter);
+  
   // Registration endpoint
   app.post("/api/register", async (req, res) => {
     try {
