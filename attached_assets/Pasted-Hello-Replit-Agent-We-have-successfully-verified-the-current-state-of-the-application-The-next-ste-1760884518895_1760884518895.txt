@@ -1,0 +1,30 @@
+Hello Replit Agent. We have successfully verified the current state of the application. The next step is to refactor the core architecture to be more robust and then add the critical missing features for user trust and account management.
+Please execute the following three parts in order.
+Part 1: Refactor Registration to Use True Function Calling
+The current "pattern matching" registration system is brittle. We will replace it with a proper function-calling architecture.
+Modify the Backend (server/routes/chat.ts):
+Create a new function named initiateSummitRegistration that takes the user's details, creates the Stripe Checkout session, and returns the checkout URL.
+Make this new function available to the Gemini model by properly defining it in the tools configuration of the getGenerativeModel call.
+Crucially, remove the complex [REGISTRATION_REQUEST:...] instructions from the system prompt. Replace it with a simple instruction: "When a user wants to register, use the initiateSummitRegistration tool."
+Modify the Frontend (client/src/components/chat/CouncilAssistant.tsx):
+Remove the entire useEffect block that contains the regular expression for [REGISTRATION_REQUEST:...] and the fetch call to /api/chat/register. This logic is now obsolete.
+The frontend's role is now simpler: it just sends messages and displays responses. The backend will handle the tool call orchestration.
+Part 2: Build the "User Trust & Safety" Foundation
+This is a non-negotiable step to build user confidence.
+Create the "AI & Data Safety" Page:
+Create a new page component at client/src/pages/AiSafety.tsx.
+Populate the page with sections for: "Our Commitment to Your Data," "Secure Payment Processing via Stripe," and "Our Ethical AI Philosophy."
+Add a route for this page in client/src/App.tsx and a link to it in the Footer.tsx component.
+Create the "Safety" AI Skill:
+Create a new Markdown file: shared/knowledge_base/safety_policy.md.
+Populate it with your core safety and data handling principles.
+Ensure the RAG system is configured so the AI can answer questions like "Is my data safe?" by using this new document as a source.
+Part 3: Build the Foundation for User Accounts
+We must prepare the application for a full user account system.
+Update the Database Schema: In shared/schema.ts, update the users table to include fields for firstName, lastName, email (unique), and a role.
+Implement Basic Authentication Pages:
+Create a SignUp.tsx page with a form to create a new user (First Name, Last Name, Email, Password).
+Create a SignIn.tsx page with a form to log in.
+Create a simple Profile.tsx page that is protected and only visible to logged-in users.
+Update the Header: Add "Sign In" and "Sign Up" links to the main navigation bar.
+Create the "Account Management" AI Skill: Add a new account_management.md file to the knowledge base so the AI can answer basic questions about creating an account and provide links to the new Sign In/Sign Up pages.

@@ -94,6 +94,12 @@ export function useCouncilAssistant() {
                 throw new Error(data.error);
               }
               
+              if (data.checkoutUrl) {
+                // Redirect to Stripe checkout
+                window.location.href = data.checkoutUrl;
+                break;
+              }
+              
               if (data.content) {
                 // Update assistant message with streamed content
                 setMessages((prev) => {

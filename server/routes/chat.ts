@@ -181,33 +181,45 @@ function generateCalendarLink(title: string, date: string, startTime: string, en
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
-// Create registration endpoint for chat
-chatRouter.post("/api/chat/register", async (req, res) => {
-  try {
-    const { firstName, lastName, email, organization, title, sector } = req.body;
-    
-    // Validate required fields
-    if (!firstName || !lastName || !email || !organization || !title || !sector) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
-    
-    const result = await initiateSummitRegistration(
-      firstName,
-      lastName,
-      email,
-      organization,
-      title,
-      sector
-    );
-    
-    res.json(result);
-  } catch (error) {
-    console.error("Chat registration error:", error);
-    res.status(500).json({ 
-      error: error instanceof Error ? error.message : "Failed to create registration" 
-    });
-  }
-});
+
+// Define function declarations for Gemini
+const tools = [{
+  functionDeclarations: [{
+    name: "initiateSummitRegistration",
+    description: "Create a registration and Stripe checkout session for the summit when the user provides all required information",
+    parameters: {
+      type: SchemaType.OBJECT,
+      properties: {
+        firstName: {
+          type: SchemaType.STRING,
+          description: "User's first name",
+        },
+        lastName: {
+          type: SchemaType.STRING,
+          description: "User's last name",
+        },
+        email: {
+          type: SchemaType.STRING,
+          description: "User's email address",
+        },
+        organization: {
+          type: SchemaType.STRING,
+          description: "User's organization or company name",
+        },
+        title: {
+          type: SchemaType.STRING,
+          description: "User's job title",
+        },
+        sector: {
+          type: SchemaType.STRING,
+          description: "Organization sector",
+          enum: ["Business - For Profit", "Non-profit", "Government", "Education", "Healthcare", "Other"],
+        },
+      },
+      required: ["firstName", "lastName", "email", "organization", "title", "sector"],
+    },
+  }],
+}];
 
 // Chat endpoint for Council Assistant
 chatRouter.post("/api/chat", async (req, res) => {
@@ -218,31 +230,14 @@ chatRouter.post("/api/chat", async (req, res) => {
       return res.status(400).json({ error: "Messages array is required" });
     }
 
-    // Initialize the model
+    // Initialize the model with tools
     const model = genAI.getGenerativeModel({ 
       model: "gemini-2.0-flash-exp",
       systemInstruction: SYSTEM_PROMPT + `
 
-REGISTRATION CAPABILITY: When a user expresses intent to register for the summit (e.g., "Yes, help me register", "I want to sign up", "Register me"), you should:
-
-1. First, collect ALL of the following information by asking the user:
-   - First name
-   - Last name
-   - Email address  
-   - Organization/Company name
-   - Job title
-   - Sector (must be one of: "Business - For Profit", "Non-profit", "Government", "Education", "Healthcare", "Other")
-
-2. Once you have ALL required information, create a special registration request in this EXACT format:
-   [REGISTRATION_REQUEST: firstName="John" lastName="Doe" email="john@example.com" organization="ACME Corp" title="Manager" sector="Business - For Profit"]
-
-3. The interface will process this request and redirect the user to Stripe checkout to complete their $25 payment.
-
-IMPORTANT: 
-- ALWAYS collect ALL fields before creating the registration request
-- The registration request MUST be on its own line
-- Use the exact format shown above with all fields
-- After creating the request, tell the user they'll be redirected to complete payment
+REGISTRATION CAPABILITY: When a user wants to register for the summit, use the initiateSummitRegistration tool. 
+First collect all required information (first name, last name, email, organization, title, and sector), then call the tool.
+The tool will handle creating the registration and Stripe checkout session.
 
 CALENDAR FEATURE: After a user confirms they have registered and paid for the summit, you should proactively ask: "Your registration is confirmed! Would you like to add the summit to your calendar?"
 
@@ -250,6 +245,7 @@ If they say yes, provide them with this special calendar link:
 [CALENDAR_LINK: Inaugural Thurston AI Business Summit | January 20, 2026 | 9:00 AM - 10:30 AM | Thurston County, WA]
 
 This will be automatically converted to a clickable Google Calendar link by the interface.`,
+      tools: tools,
     });
 
     // Convert messages to Gemini format
@@ -284,15 +280,64 @@ This will be automatically converted to a clickable Google Calendar link by the 
     });
 
     try {
-      // Send message and stream the response
-      const result = await chat.sendMessageStream(latestMessage.content);
+      // Send message first to check for function calls
+      const result = await chat.sendMessage(latestMessage.content);
+      const response = result.response;
       
-      for await (const chunk of result.stream) {
-        const chunkText = chunk.text();
-        if (chunkText) {
-          // Send as SSE format
-          res.write(`data: ${JSON.stringify({ content: chunkText })}\n\n`);
+      // Check if the model wants to call a function
+      const functionCalls = response.functionCalls();
+      
+      if (functionCalls && functionCalls.length > 0) {
+        // Handle function calls
+        for (const call of functionCalls) {
+          if (call.name === "initiateSummitRegistration") {
+            try {
+              const args = call.args as any;
+              const registrationResult = await initiateSummitRegistration(
+                args.firstName,
+                args.lastName,
+                args.email,
+                args.organization,
+                args.title,
+                args.sector
+              );
+              
+              // Send the checkout URL to the client
+              res.write(`data: ${JSON.stringify({ 
+                content: `I've created your registration! Redirecting you to complete payment...`,
+                checkoutUrl: registrationResult.url 
+              })}\n\n`);
+              
+              // Send function response back to the model for confirmation
+              const functionResponse = {
+                name: call.name,
+                response: {
+                  success: true,
+                  checkoutUrl: registrationResult.url,
+                  registrationId: registrationResult.registrationId
+                }
+              };
+              
+              // Get final response from model
+              const finalResult = await chat.sendMessage([{
+                functionResponse: functionResponse
+              }]);
+              
+              // Stream the final response
+              const finalText = finalResult.response.text();
+              res.write(`data: ${JSON.stringify({ content: finalText })}\n\n`);
+              
+            } catch (error) {
+              res.write(`data: ${JSON.stringify({ 
+                content: `Sorry, there was an error creating your registration: ${error instanceof Error ? error.message : 'Unknown error'}` 
+              })}\n\n`);
+            }
+          }
         }
+      } else {
+        // No function calls, just send the text response
+        const text = response.text();
+        res.write(`data: ${JSON.stringify({ content: text })}\n\n`);
       }
       
       // Send completion signal

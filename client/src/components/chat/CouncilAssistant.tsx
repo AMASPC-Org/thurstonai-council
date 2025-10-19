@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,73 +19,19 @@ export default function CouncilAssistant() {
   } = useCouncilAssistant();
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const [processedRegistrations, setProcessedRegistrations] = useState<Set<string>>(new Set());
-
-  // Handle registration requests once per message
-  useEffect(() => {
-    messages.forEach((message) => {
-      if (message.role === 'assistant' && message.content) {
-        const registrationRegex = /\[REGISTRATION_REQUEST:\s*firstName="([^"]+)"\s*lastName="([^"]+)"\s*email="([^"]+)"\s*organization="([^"]+)"\s*title="([^"]+)"\s*sector="([^"]+)"\]/;
-        const match = message.content.match(registrationRegex);
-        
-        if (match && !processedRegistrations.has(message.id)) {
-          // Mark this message as processed
-          setProcessedRegistrations(prev => new Set(Array.from(prev).concat(message.id)));
-          
-          // Extract registration data
-          const [, firstName, lastName, email, organization, title, sector] = match;
-          
-          // Make API call to create registration
-          fetch('/api/chat/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              firstName,
-              lastName,
-              email,
-              organization,
-              title,
-              sector
-            })
-          })
-          .then(res => res.json())
-          .then(data => {
-            if (data.url) {
-              // Auto-redirect to Stripe checkout
-              window.location.href = data.url;
-            } else if (data.error) {
-              console.error('Registration error:', data.error);
-            }
-          })
-          .catch(err => {
-            console.error('Registration error:', err);
-          });
-        }
-      }
-    });
-  }, [messages, processedRegistrations]);
 
   // Parse message content and replace page mentions with clickable links
   const parseMessageContent = (content: string) => {
-    // Remove registration requests from display
-    const registrationRegex = /\[REGISTRATION_REQUEST:\s*firstName="([^"]+)"\s*lastName="([^"]+)"\s*email="([^"]+)"\s*organization="([^"]+)"\s*title="([^"]+)"\s*sector="([^"]+)"\]/;
-    const cleanedContent = content.replace(registrationRegex, '').trim();
-    
-    // Check for calendar links - use cleaned content
+    // Check for calendar links
     const calendarLinkRegex = /\[CALENDAR_LINK: ([^\]]+)\]/g;
     let parts: (string | JSX.Element)[] = [];
     let lastIndex = 0;
     let match;
-    
-    // Use cleanedContent instead of content for parsing
-    const contentToProcess = cleanedContent;
 
-    while ((match = calendarLinkRegex.exec(contentToProcess)) !== null) {
+    while ((match = calendarLinkRegex.exec(content)) !== null) {
       // Add text before the calendar link
       if (match.index > lastIndex) {
-        parts.push(contentToProcess.substring(lastIndex, match.index));
+        parts.push(content.substring(lastIndex, match.index));
       }
 
       // Parse the calendar link details
@@ -131,13 +77,13 @@ export default function CouncilAssistant() {
     }
 
     // Add any remaining text
-    if (lastIndex < contentToProcess.length) {
-      parts.push(contentToProcess.substring(lastIndex));
+    if (lastIndex < content.length) {
+      parts.push(content.substring(lastIndex));
     }
 
-    // If no calendar links were found, process the entire cleaned content
+    // If no calendar links were found, process the entire content
     if (parts.length === 0) {
-      parts = [contentToProcess];
+      parts = [content];
     }
 
     // Now process page links
